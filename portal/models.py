@@ -60,7 +60,12 @@ class Resource(models.Model):
 
     downloads = models.IntegerField(default=0)
 
+    # ✅ Upload date (already correct)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    # ✅ OPTIONAL (good for sorting latest uploads)
+    class Meta:
+        ordering = ['-uploaded_at']
 
     def __str__(self):
         return self.title

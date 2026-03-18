@@ -29,7 +29,7 @@ margin:auto;
 margin-top:30px;
 }
 
-/* RED LOGOUT BUTTON */
+/* LOGOUT */
 
 .logout-btn{
 background:#fa5252;
@@ -45,7 +45,7 @@ font-weight:bold;
 background:#e03131;
 }
 
-/* STATISTICS CARDS */
+/* STATISTICS */
 
 .stats-grid{
 display:grid;
@@ -58,27 +58,17 @@ margin-bottom:30px;
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 text-align:center;
 }
 
-.stat-card h3{
-color:#4c6ef5;
-margin-bottom:10px;
-}
-
-.stat-card p{
-font-size:24px;
-font-weight:bold;
-}
-
-/* Search */
+/* SEARCH */
 
 .search-box{
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 margin-bottom:30px;
 }
 
@@ -93,6 +83,8 @@ padding:10px;
 border-radius:6px;
 border:1px solid #ccc;
 }
+
+/* BUTTON */
 
 button{
 background:#4c6ef5;
@@ -111,7 +103,7 @@ border-radius:6px;
 text-decoration:none;
 }
 
-/* Categories */
+/* CATEGORY */
 
 .category-section{
 margin-bottom:30px;
@@ -132,7 +124,7 @@ background:#4c6ef5;
 color:white;
 }
 
-/* Resource cards */
+/* RESOURCE CARDS */
 
 .resource-grid{
 display:grid;
@@ -143,18 +135,24 @@ gap:20px;
 .resource-card{
 background:white;
 padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+border-radius:12px;
+box-shadow:0 6px 15px rgba(0,0,0,0.1);
 transition:0.2s;
 }
 
 .resource-card:hover{
-transform:translateY(-3px);
+transform:translateY(-5px);
 }
 
 .resource-title{
 font-size:18px;
 font-weight:bold;
+margin-bottom:10px;
+}
+
+.resource-desc{
+font-size:14px;
+color:#555;
 margin-bottom:10px;
 }
 
@@ -174,6 +172,10 @@ border-radius:6px;
 text-decoration:none;
 }
 
+.download-btn:hover{
+background:#3b5bdb;
+}
+
 .downloads{
 font-size:14px;
 color:gray;
@@ -187,22 +189,19 @@ margin-top:5px;
 <body>
 
 <div class="header">
-
 <h2>Student Dashboard</h2>
 
 <form method="POST" action="{% url 'logout' %}">
 {% csrf_token %}
 <button class="logout-btn">Logout</button>
 </form>
-
 </div>
 
 <div class="container">
 
-<!-- DASHBOARD STATISTICS -->
+<!-- STATS -->
 
 <div class="stats-grid">
-
 <div class="stat-card">
 <h3>Total Resources</h3>
 <p>{{ total_resources }}</p>
@@ -217,36 +216,23 @@ margin-top:5px;
 <h3>Total Downloads</h3>
 <p>{{ total_downloads }}</p>
 </div>
-
 </div>
 
 <!-- SEARCH -->
 
 <div class="search-box">
-
 <h3>Search Resources</h3>
 
 <form method="GET" class="search-form">
-
-<input 
-type="text"
-name="q"
-placeholder="Search by title or category"
-value="{{ request.GET.q }}"
->
-
+<input type="text" name="q" placeholder="Search by title or category" value="{{ request.GET.q }}">
 <button type="submit">Search</button>
-
 <a href="/" class="show-all">Show All</a>
-
 </form>
-
 </div>
 
-<!-- CATEGORY FILTER -->
+<!-- CATEGORY -->
 
 <div class="category-section">
-
 <h3>Categories</h3>
 
 <a href="{% url 'dashboard' %}">
@@ -254,92 +240,57 @@ value="{{ request.GET.q }}"
 </a>
 
 {% for category in categories %}
-
 <a href="?category={{ category.id }}">
 <button class="category-btn">{{ category.name }}</button>
 </a>
-
 {% endfor %}
-
 </div>
 
-<!-- TOP RESOURCES -->
+<!-- TOP -->
 
 <h3>🔥 Top Resources</h3>
 
 <div class="resource-grid">
-
 {% for resource in top_resources %}
-
 <div class="resource-card">
-
 <div class="resource-title">{{ resource.title }}</div>
-
-<div class="resource-category">
-{{ resource.category.name }}
+<div class="resource-category">{{ resource.category.name }}</div>
+<div class="downloads">Downloads: {{ resource.downloads }}</div>
+<a class="download-btn" href="{% url 'download_resource' resource.id %}">Download</a>
 </div>
-
-<div class="downloads">
-Downloads: {{ resource.downloads }}
-</div>
-
-<a class="download-btn" href="{% url 'download_resource' resource.id %}">
-Download
-</a>
-
-</div>
-
 {% endfor %}
-
 </div>
 
-<!-- LATEST UPLOADS -->
+<!-- LATEST -->
 
 <h3>🆕 Latest Uploads</h3>
 
 <div class="resource-grid">
-
 {% for resource in latest_resources %}
-
 <div class="resource-card">
-
 <div class="resource-title">{{ resource.title }}</div>
-
-<div class="resource-category">
-{{ resource.category.name }}
+<div class="resource-category">{{ resource.category.name }}</div>
+<div class="downloads">Uploaded: {{ resource.uploaded_at|date:"d M Y" }}</div>
+<a class="download-btn" href="{% url 'download_resource' resource.id %}">Download</a>
 </div>
-
-<div class="downloads">
-Uploaded: {{ resource.uploaded_at|date:"d M Y" }}
-</div>
-
-<a class="download-btn" href="{% url 'download_resource' resource.id %}">
-Download
-</a>
-
-</div>
-
 {% empty %}
-
 <p>No recent uploads.</p>
-
 {% endfor %}
-
 </div>
 
-<!-- ALL RESOURCES -->
+<!-- ALL -->
 
-<h3>Available Resources</h3>
+<h3>📚 All Resources</h3>
 
 <div class="resource-grid">
-
 {% for resource in resources %}
-
 <div class="resource-card">
 
 <div class="resource-title">{{ resource.title }}</div>
 
-<div>{{ resource.description }}</div>
+<div class="resource-desc">
+{{ resource.description }}
+</div>
 
 <div class="resource-category">
 {{ resource.category.name }}
@@ -360,11 +311,8 @@ Download
 </div>
 
 {% empty %}
-
 <p>No resources available</p>
-
 {% endfor %}
-
 </div>
 
 </div>
