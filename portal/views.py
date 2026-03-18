@@ -12,7 +12,6 @@ from .forms import RegisterForm
 def register(request):
 
     if request.method == 'POST':
-
         form = RegisterForm(request.POST)
 
         if form.is_valid():
@@ -47,7 +46,6 @@ def dashboard(request):
             file = request.FILES.get('file')
 
             if title and file and category_id:
-
                 Resource.objects.create(
                     title=title,
                     description=description,
@@ -61,20 +59,15 @@ def dashboard(request):
         # Teacher resources
         resources = Resource.objects.filter(uploaded_by=request.user)
 
-        # Teacher media count
-        teacher_upload_count = Resource.objects.filter(
-            uploaded_by=request.user
-        ).count()
+        # Stats
+        teacher_upload_count = resources.count()
 
-        # Teacher total downloads
-        teacher_total_downloads = Resource.objects.filter(
-            uploaded_by=request.user
-        ).aggregate(total=Sum('downloads'))['total'] or 0
+        teacher_total_downloads = resources.aggregate(
+            total=Sum('downloads')
+        )['total'] or 0
 
-        # Top downloaded resources
-        top_resources = Resource.objects.filter(
-            uploaded_by=request.user
-        ).order_by('-downloads')[:3]
+        # Top resources
+        top_resources = resources.order_by('-downloads')[:3]
 
         context = {
             'resources': resources,
@@ -107,13 +100,13 @@ def dashboard(request):
         if category_id:
             resources = resources.filter(category_id=category_id)
 
-        # Top downloaded resources
+        # Top resources
         top_resources = Resource.objects.order_by('-downloads')[:3]
 
-        # Latest uploaded resources
+        # Latest resources
         latest_resources = Resource.objects.order_by('-uploaded_at')[:3]
 
-        # Dashboard statistics
+        # Stats
         total_resources = Resource.objects.count()
         total_categories = Category.objects.count()
         total_downloads = Resource.objects.aggregate(
@@ -156,7 +149,7 @@ def download_resource(request, resource_id):
 
     resource = get_object_or_404(Resource, id=resource_id)
 
-    # Increase download count
+    # 🔥 Auto increase downloads
     resource.downloads += 1
     resource.save()
 
