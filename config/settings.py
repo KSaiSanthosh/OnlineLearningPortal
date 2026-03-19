@@ -1,14 +1,11 @@
 import os
 from pathlib import Path
 
-# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
 SECRET_KEY = 'django-insecure-change-this-key'
-
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 # Installed apps
@@ -20,10 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Third party apps
     'import_export',
-
-    # Local apps
     'portal',
 ]
 
@@ -31,7 +25,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # ✅ ADDED (IMPORTANT)
+    # ✅ WhiteNoise (serves static files)
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,19 +36,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Main URLs
 ROOT_URLCONF = 'config.urls'
 
 # Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
-        # Optional (you can keep it empty too)
-        'DIRS': [BASE_DIR / 'templates'],
-
+        'DIRS': [],   # keep empty (you are using app templates)
         'APP_DIRS': True,
-
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -66,7 +55,6 @@ TEMPLATES = [
     },
 ]
 
-# WSGI
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database (SQLite)
@@ -79,46 +67,47 @@ DATABASES = {
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Language and timezone
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (IMPORTANT FIX)
+# ================================
+# 🔥 STATIC FILES (FINAL FIX)
+# ================================
+
 STATIC_URL = '/static/'
 
+# Your static files
 STATICFILES_DIRS = [
     BASE_DIR / 'portal/static',
 ]
 
+# Where all static files will be collected
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# ✅ ADD THIS (VERY IMPORTANT)
+# WhiteNoise storage (IMPORTANT)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ================================
 
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Authentication redirects
+# Auth redirects
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+# Optional (fix for HTTPS on Render)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
