@@ -25,7 +25,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # ✅ WhiteNoise
+    # ✅ WhiteNoise MUST be here
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -80,17 +80,18 @@ USE_I18N = True
 USE_TZ = True
 
 # =========================
-# 🔥 STATIC FILES (FIXED)
+# 🔥 STATIC FILES (FINAL)
 # =========================
 
 STATIC_URL = '/static/'
 
-# ❌ REMOVE portal/static (important fix)
-STATICFILES_DIRS = []
+# ❗ IMPORTANT: DO NOT set STATICFILES_DIRS
+# (this was breaking admin CSS)
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# ✅ Use SIMPLE storage (most stable)
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # =========================
 
