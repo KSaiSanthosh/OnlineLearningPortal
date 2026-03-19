@@ -25,7 +25,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # ✅ WhiteNoise (serves static files)
+    # ✅ WhiteNoise
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,7 +42,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],   # keep empty (you are using app templates)
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -57,7 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database (SQLite)
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -73,41 +73,37 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# Language
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# ================================
-# 🔥 STATIC FILES (FINAL FIX)
-# ================================
+# =========================
+# 🔥 STATIC FILES (FIXED)
+# =========================
 
 STATIC_URL = '/static/'
 
-# Your static files
-STATICFILES_DIRS = [
-    BASE_DIR / 'portal/static',
-]
+# ❌ REMOVE portal/static (important fix)
+STATICFILES_DIRS = []
 
-# Where all static files will be collected
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise storage (IMPORTANT)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ================================
+# =========================
 
-# Media files
+# Media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Auth redirects
+# Auth
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
-# Optional (fix for HTTPS on Render)
+# HTTPS fix
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
