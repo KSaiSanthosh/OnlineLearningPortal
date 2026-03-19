@@ -25,7 +25,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # ✅ WhiteNoise MUST be here
+    # WhiteNoise (serves static files)
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -80,17 +80,20 @@ USE_I18N = True
 USE_TZ = True
 
 # =========================
-# 🔥 STATIC FILES (FINAL)
+# 🔥 STATIC FILES (FINAL FIX)
 # =========================
 
 STATIC_URL = '/static/'
 
-# ❗ IMPORTANT: DO NOT set STATICFILES_DIRS
-# (this was breaking admin CSS)
+# ✅ ADD THIS BACK (VERY IMPORTANT)
+STATICFILES_DIRS = [
+    BASE_DIR / 'portal/static',
+]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# ✅ IMPORTANT (use os.path for Render)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# ✅ Use SIMPLE storage (most stable)
+# ✅ Stable storage
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # =========================
