@@ -25,8 +25,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # WhiteNoise (serves static files)
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # ❌ REMOVE WhiteNoise (IMPORTANT FIX)
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,21 +80,21 @@ USE_I18N = True
 USE_TZ = True
 
 # =========================
-# 🔥 STATIC FILES (FINAL FIX)
+# 🔥 STATIC FILES (FINAL WORKING)
 # =========================
 
 STATIC_URL = '/static/'
 
-# ✅ ADD THIS BACK (VERY IMPORTANT)
+# ✅ KEEP THIS (your static files)
 STATICFILES_DIRS = [
     BASE_DIR / 'portal/static',
 ]
 
-# ✅ IMPORTANT (use os.path for Render)
+# ✅ REQUIRED for collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# ✅ Stable storage
-STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+# ❌ REMOVE storage setting (IMPORTANT)
+# STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # =========================
 
