@@ -182,6 +182,22 @@ color:gray;
 margin-top:5px;
 }
 
+/* PAGINATION */
+
+.pagination a{
+padding:6px 12px;
+background:#4c6ef5;
+color:white;
+border-radius:5px;
+text-decoration:none;
+margin:5px;
+}
+
+.pagination span{
+margin:0 10px;
+font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -313,6 +329,26 @@ Download
 {% empty %}
 <p>No resources available</p>
 {% endfor %}
+</div>
+
+<!-- PAGINATION -->
+
+<div class="pagination" style="text-align:center; margin-top:30px;">
+
+{% if resources.has_previous %}
+<a href="?page=1">First</a>
+<a href="?page={{ resources.previous_page_number }}">Previous</a>
+{% endif %}
+
+<span>
+Page {{ resources.number }} of {{ resources.paginator.num_pages }}
+</span>
+
+{% if resources.has_next %}
+<a href="?page={{ resources.next_page_number }}">Next</a>
+<a href="?page={{ resources.paginator.num_pages }}">Last</a>
+{% endif %}
+
 </div>
 
 </div>

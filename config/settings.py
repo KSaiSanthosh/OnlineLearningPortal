@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-change-this-key'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Installed apps
 INSTALLED_APPS = [
@@ -30,6 +30,10 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # ✅ ADDED (IMPORTANT)
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -46,10 +50,11 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
 
-        # Add templates folder here
+        # Optional (you can keep it empty too)
         'DIRS': [BASE_DIR / 'templates'],
 
         'APP_DIRS': True,
+
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -64,7 +69,7 @@ TEMPLATES = [
 # WSGI
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
+# Database (SQLite)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,14 +99,19 @@ TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
+# Static files (IMPORTANT FIX)
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'portal/static',
 ]
 
-# Media files (uploaded resources)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# ✅ ADD THIS (VERY IMPORTANT)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -112,6 +122,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
-ALLOWED_HOSTS = ['*']
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
