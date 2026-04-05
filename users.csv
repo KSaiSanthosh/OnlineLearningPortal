@@ -1,0 +1,4 @@
+username,email,password,role
+student1,student1@gmail.com,12345,student
+student2,student2@gmail.com,12345,student
+teacher1,teacher1@gmail.com,12345,teacher
